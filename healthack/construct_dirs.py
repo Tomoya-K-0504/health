@@ -1,0 +1,15 @@
+from pathlib import Path
+
+Path(Path.cwd() / "setup.py").touch(exist_ok=True)
+Path(Path.cwd() / "config").mkdir(exist_ok=True)
+Path(Path.cwd() / "config" / "const.py").touch(exist_ok=True)
+Path(Path.cwd() / "notebooks").mkdir(exist_ok=True)
+Path(Path.cwd() / "data" / "processed").mkdir(exist_ok=True, parents=True)
+Path(Path.cwd() / "models").mkdir(exist_ok=True)
+Path(Path.cwd() / "src" / "data" / "raw").mkdir(exist_ok=True, parents=True)
+Path(Path.cwd() / "src" / "features").mkdir(exist_ok=True)
+Path(Path.cwd() / "src" / "models").mkdir(exist_ok=True)
+Path(Path.cwd() / "src" / "visualization").mkdir(exist_ok=True)
+Path(Path.cwd() / "reports" / "figures").mkdir(exist_ok=True, parents=True)
+Path(Path.cwd() / "reports" / "results").mkdir(exist_ok=True)
+Path(Path.cwd() / "logs").mkdir(exist_ok=True)
