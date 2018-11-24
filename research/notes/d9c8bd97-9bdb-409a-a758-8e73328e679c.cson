@@ -1,0 +1,14 @@
+createdAt: "2018-11-20T01:42:12.783Z"
+updatedAt: "2018-11-20T01:43:29.373Z"
+type: "MARKDOWN_NOTE"
+folder: "6e864326aa979b510561"
+title: "生体データ活用の最前線メモ"
+content: '''
+  # 生体データ活用の最前線メモ
+  
+  - 非接触の心拍センサーとして、ドップラーレーダーがある。距離分解能に優れ、体表面の微小変化から心拍を予想する
+  - 
+'''
+tags: []
+isStarred: false
+isTrashed: false
