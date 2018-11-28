@@ -1,0 +1,38 @@
+createdAt: "2018-11-28T05:06:15.784Z"
+updatedAt: "2018-11-28T08:12:54.261Z"
+type: "MARKDOWN_NOTE"
+folder: "6e864326aa979b510561"
+title: "勤労者の日常生活下における行動、心理、生理、環境情報の統合"
+content: '''
+  # 勤労者の日常生活下における行動、心理、生理、環境情報の統合
+  
+  EMA(Ecological Momentary Assessment)は、スマホ等を用いてその時の気分をそのタイミングで記録する.
+  
+  実験は主に2014年と2015年の2回、前者は被験者を2群にわけて、職場環境のセンサーと家の環境センサーに分ける。2015年は両方。
+  
+  
+  ## ベースライン調査
+  14年実施では以下の2つを調査.
+  - 職業性ストレスチェックの主要項目(仕事の量的負担、仕事のコントロール、上司からのサポート、同僚からのサポート)
+  - 不安傾向(特性不安と状態不安で、前者は広い範囲の刺激場面を危険なあるいは有害なものと知覚する素質の個人差を指し、後者は不安を喚起する事象に対する一過性の状況反応を指す)
+  
+  15年調査では上に加え、
+  - 抑うつ傾向
+  - 失感情症傾向
+  
+  職業性ストレスはスマホアプリで、ほかは質問紙で調査。
+  
+  
+  
+  ---
+  
+  アクチグラフ...
+  - 2~3Hz 帯域において0.01G/rad/s 以上の動きを検出できる腕時計型の高感度加速度センサ
+  - 日常生活における微小な身体活動の記録や、睡眠覚醒の判定に利用可能
+  
+  [アクチグラフを用いた睡眠覚醒の判定](https://watermark.silverchair.com/sleep-15-5-461.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAAmEwggJdBgkqhkiG9w0BBwagggJOMIICSgIBADCCAkMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMaRxVDr7oQpGOhqfRAgEQgIICFBAvv5iQEgDAZ6z6gxMfDmzk4LJT7rtKwff6W6AgaJ1AUWmvtgnAR5OeELlVznyaiWf3gocV7uk88j2J2FN_mtQ081lgx8MgPyF6YO7mNivTCGSt03Z1rNgjq2kBv_Ses1XO3I3oDqQ1_iLgMgFP_H2jW7yF08HAetevtV2eHDloauRzgB8Ud2t_yqY7P-6HrOUhn7ZRKskkwgOSg6m6V0VmFF2W2ksgyj2E4dhyXbwQdBoEmjd9gYvNUgAFPjyIu4pODxmmNjFfB_uHDrrD0jYvK9cpghacFkuuJ3cXPUuZeBLSRHz3EPhvHiYnHVsAhno5mYnN37ptxLP5lqn192pth3FkvOcHDev2GRcuC3sf3I0PKb2p9BI947CIZSxQHNO41xA5AP0QKk9wS73zBhYrfbV_HX1bHHgoxVf7hAgjwm3szW8D2uAdBxqp1KcocroxnNZMxARrf7TwRkUgx8sjHWLjo7JpUjrpD2qdJg4MgQjwQ0ZL4bYr8wTLmfdZNHHKs4CF85Dy98bKNB9-C0p8CPktUx2cN-5Jw7-ZZz1W9G9IJ807y3gCVRCSwYZG0gIBi0GwRJEx_XEe1fp82uRvtUU3OmjRNOlt5i2oF_NMwUhI1grypOsCcHzDyarfjYQC9-k4qoq2nEiuhWrY-Se9qInRqZ89fclz36nTHFQzVaDhPV0HlR8D2kaQF35ramQrZ0Q)
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false
