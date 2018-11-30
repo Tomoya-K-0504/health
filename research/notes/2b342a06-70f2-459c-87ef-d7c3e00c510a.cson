@@ -1,5 +1,5 @@
 createdAt: "2018-11-28T05:06:15.784Z"
-updatedAt: "2018-11-28T08:12:54.261Z"
+updatedAt: "2018-11-29T06:50:03.185Z"
 type: "MARKDOWN_NOTE"
 folder: "6e864326aa979b510561"
 title: "勤労者の日常生活下における行動、心理、生理、環境情報の統合"
@@ -22,15 +22,36 @@ content: '''
   
   職業性ストレスはスマホアプリで、ほかは質問紙で調査。
   
+  ---
+  
+  ### 分析方法
+  各従業員の線形回帰には、マルチレベルモデリングで、切片に変量効果を仮定する方法とした。
+  ↑データ数が十分になく適切なモデル係数が得られない場合があるため。
+  マルチレベルモデル分析には R 3.2.2の[lmerTestパッケージ](https://cran.r-project.org/web/packages/lmerTest/index.html)のlmer関数を用いた。
+  
+  各変数の級内相関係数は0.42~0.67であり、これは個人間の分散が計測データ全体の分散の42~67%を占めることを意味する。
+  個人間の分散が5%や10%程度でも通常の回帰分析では有意なバイアスが生じる例があったり、級内相関係数が0.02程度あれば中程度の個人間変動が存在すると解釈する例もある。
+  今回はマルチレベルモデルを使う必要有りと判断した。
+  
+  ---
+  
+  ### 結果
+  図を差し込む。
+  今回は測定数値を日中アラーム時の前後1時間の平均値としたが、この時間幅はパラメータとしてより短い時間幅で相関を見るといったことも必要。
   
   
   ---
   
-  アクチグラフ...
+  ##### アクチグラフ...
   - 2~3Hz 帯域において0.01G/rad/s 以上の動きを検出できる腕時計型の高感度加速度センサ
   - 日常生活における微小な身体活動の記録や、睡眠覚醒の判定に利用可能
   
   [アクチグラフを用いた睡眠覚醒の判定](https://watermark.silverchair.com/sleep-15-5-461.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAAmEwggJdBgkqhkiG9w0BBwagggJOMIICSgIBADCCAkMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMaRxVDr7oQpGOhqfRAgEQgIICFBAvv5iQEgDAZ6z6gxMfDmzk4LJT7rtKwff6W6AgaJ1AUWmvtgnAR5OeELlVznyaiWf3gocV7uk88j2J2FN_mtQ081lgx8MgPyF6YO7mNivTCGSt03Z1rNgjq2kBv_Ses1XO3I3oDqQ1_iLgMgFP_H2jW7yF08HAetevtV2eHDloauRzgB8Ud2t_yqY7P-6HrOUhn7ZRKskkwgOSg6m6V0VmFF2W2ksgyj2E4dhyXbwQdBoEmjd9gYvNUgAFPjyIu4pODxmmNjFfB_uHDrrD0jYvK9cpghacFkuuJ3cXPUuZeBLSRHz3EPhvHiYnHVsAhno5mYnN37ptxLP5lqn192pth3FkvOcHDev2GRcuC3sf3I0PKb2p9BI947CIZSxQHNO41xA5AP0QKk9wS73zBhYrfbV_HX1bHHgoxVf7hAgjwm3szW8D2uAdBxqp1KcocroxnNZMxARrf7TwRkUgx8sjHWLjo7JpUjrpD2qdJg4MgQjwQ0ZL4bYr8wTLmfdZNHHKs4CF85Dy98bKNB9-C0p8CPktUx2cN-5Jw7-ZZz1W9G9IJ807y3gCVRCSwYZG0gIBi0GwRJEx_XEe1fp82uRvtUU3OmjRNOlt5i2oF_NMwUhI1grypOsCcHzDyarfjYQC9-k4qoq2nEiuhWrY-Se9qInRqZ89fclz36nTHFQzVaDhPV0HlR8D2kaQF35ramQrZ0Q)
+  
+  ##### マルチレベルモデリング
+  [一番わかり易い資料](https://www.jstage.jst.go.jp/article/ojjams/23/2/23_2_2_139/_pdf)
+    固定効果とランダム効果を式に組み込む。固定効果はその効果が有限後の要素で決定されるとする。ランダム効果はサンプリングによる誤差が効果に生じていると考える。
+    マルチレベルモデリングでは、切片や係数に対してグループ内でのランダム効果を導入する。
   
 '''
 tags: []
