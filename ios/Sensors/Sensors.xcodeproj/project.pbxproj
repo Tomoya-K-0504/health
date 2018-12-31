@@ -14,6 +14,7 @@
 		66209AB021D9DE880085694C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66209AAE21D9DE880085694C /* LaunchScreen.storyboard */; };
 		66209ABB21D9DE880085694C /* SensorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66209ABA21D9DE880085694C /* SensorsTests.swift */; };
 		66209AC621D9DE880085694C /* SensorsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66209AC521D9DE880085694C /* SensorsUITests.swift */; };
+		66209AD521D9E1C80085694C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66209AD421D9E1C80085694C /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		66209AC121D9DE880085694C /* SensorsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SensorsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66209AC521D9DE880085694C /* SensorsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorsUITests.swift; sourceTree = "<group>"; };
 		66209AC721D9DE880085694C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66209AD421D9E1C80085694C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66209AD521D9E1C80085694C /* CoreMotion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +84,7 @@
 				66209AB921D9DE880085694C /* SensorsTests */,
 				66209AC421D9DE880085694C /* SensorsUITests */,
 				66209AA321D9DE870085694C /* Products */,
+				66209AD321D9E1C80085694C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +127,14 @@
 				66209AC721D9DE880085694C /* Info.plist */,
 			);
 			path = SensorsUITests;
+			sourceTree = "<group>";
+		};
+		66209AD321D9E1C80085694C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66209AD421D9E1C80085694C /* CoreMotion.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
