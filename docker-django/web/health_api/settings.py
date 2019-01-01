@@ -25,7 +25,7 @@ SECRET_KEY = 'prfkt-g(44^oasas&+iq0r5v+e-a3)l8(r8ftw8bn9kzv6cp^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '35.236.167.20']
+ALLOWED_HOSTS = ['35.236.167.20', 'localhost']
 
 
 # Application definition
