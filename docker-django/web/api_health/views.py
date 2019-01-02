@@ -28,8 +28,8 @@ def save_env(request):
             env_sensor = EnvSensor(
                 data_source=DataSource.objects.get(name=env["data_source"]),
                 brightness=env["values"]["brightness"],
-                m_peak_power=envenv["values"]["m_peak_power"],
-                m_average_power=envenv["values"]["m_average_power"]
+                m_peak_power=env["values"]["m_peak_power"],
+                m_average_power=env["values"]["m_average_power"]
             )
             env_sensor.save()
     return HttpResponseRedirect(reverse('api:index'))
