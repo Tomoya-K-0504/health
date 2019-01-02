@@ -1,0 +1,9 @@
+{% if accel_dict %}
+    <ul>
+        <li>X axis: {{ accel_dict.X }}</li>
+        <li>Y axis: {{ accel_dict.Y }}</li>
+        <li>Z axis: {{ accel_dict.Z }}</li>
+    </ul>
+{% else %}
+    <p>No accelerations are available.</p>
+{% endif %}
