@@ -12,6 +12,13 @@
     "fields": {
       "name": "iphone 6s"
     }
+  },
+  {
+    "model": "api_health.DataSource",
+    "pk": 3,
+    "fields": {
+      "name": "fitbit_charge3"
+    }
   }
 ]
 

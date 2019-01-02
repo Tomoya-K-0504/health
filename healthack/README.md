@@ -3,6 +3,13 @@ healthack
 
 health hack by analyzing health data
 
+
+## 環境構築
+
+#### 毎回やるtokenの取得
+python-fitbit/gather_keys_oauth2.py 【OAuth 2.0 Client ID】 【Client Secret】
+
+
 Project Organization
 ------------
 
