@@ -1,0 +1,17 @@
+[
+  {
+    "model": "api_health.DataSource",
+    "pk": 1,
+    "fields": {
+      "name": "iphone 8"
+    }
+  },
+  {
+    "model": "api_health.DataSource",
+    "pk": 2,
+    "fields": {
+      "name": "iphone 6s"
+    }
+  }
+]
+
