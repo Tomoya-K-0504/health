@@ -81,7 +81,7 @@ class ViewController: UIViewController {
         
         lightLabel.text = "brightness: "
         
-//        self.startUpdatingVolume()
+        self.startUpdatingVolume()
         
         GetSensors()
         
@@ -96,15 +96,12 @@ class ViewController: UIViewController {
             manager.stopAccelerometerUpdates()
         }
         
-//        self.stopUpdatingVolume()
+        self.stopUpdatingVolume()
     }
     
     // MARK: - Internal methods
 
     func GetSensors() {
-        // 光センサーの値を取得
-        let brightness = UIScreen.main.brightness
-        lightLabel.text = String(format: "brightness: %.6f", brightness)
         
         // 加速度
         if manager.isAccelerometerAvailable {
@@ -162,7 +159,7 @@ class ViewController: UIViewController {
         var enabledLevelMeter: UInt32 = 1
         AudioQueueSetProperty(self.queue, kAudioQueueProperty_EnableLevelMetering, &enabledLevelMeter, UInt32(MemoryLayout<UInt32>.size))
         
-        self.timer = Timer.scheduledTimer(timeInterval: 0.5,
+        self.timer = Timer.scheduledTimer(timeInterval: 30,
                                           target: self,
                                           selector: #selector(self.detectVolume(_:)),
                                           userInfo: nil,
@@ -195,6 +192,34 @@ class ViewController: UIViewController {
         // Show the audio channel's peak and average RMS power.
         self.peakTextField.text = "".appendingFormat("%.2f", levelMeter.mPeakPower)
         self.averageTextField.text = "".appendingFormat("%.2f", levelMeter.mAveragePower)
+        
+        // 光センサーの値を取得
+        let brightness = UIScreen.main.brightness
+        self.lightLabel.text = String(format: "brightness: %.6f", brightness)
+        
+        // サーバーに送信
+//        let url = URL(string: "http://35.236.167.20/api/env/")!
+        let url = URL(string: "http://localhost/api/env/")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        let postString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"brightness\": %.6f, \"m_peak_power\": %.6f, \"m_average_power\": %.6f}}]", brightness, levelMeter.mPeakPower, levelMeter.mAveragePower)
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+        }
+        task.resume()
         
         // Show "LOUD!!" if mPeakPower is larger than -1.0
 //        self.loudLabel.isHidden = (levelMeter.mPeakPower >= -1.0) ? false : true
