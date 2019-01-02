@@ -15,6 +15,6 @@ def index(request):
 @csrf_exempt
 def save_accel(request):
     if request.method == "POST":
-        accel_dict = json.loads(request.body.decode("utf-8"))
-        acceleration = Acceleration.create(DataSource.objects.get(id=1), accel_dict)
+        accel_data = json.loads(request.body.decode("utf-8"))
+        acceleration = Acceleration.create(accel_data)
     return HttpResponseRedirect(reverse('api:index'))

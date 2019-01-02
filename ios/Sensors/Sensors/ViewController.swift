@@ -27,7 +27,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var displaySensorValues: UIButton!
     @IBOutlet weak var labelText: UITextField!
     @IBOutlet weak var lightLabel: UILabel!
-    @IBOutlet weak var accerelometerLabel: UILabel!
+    @IBOutlet weak var xLabel: UILabel!
+    @IBOutlet weak var yLabel: UILabel!
+    @IBOutlet weak var zLabel: UILabel!
     @IBOutlet weak var peakTextField: UITextField!
     @IBOutlet weak var averageTextField: UITextField!
     
@@ -54,45 +56,69 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         lightLabel.text = "brightness: "
-        accerelometerLabel.text = "Accel.: "
         
-        self.startUpdatingVolume()
+//        self.startUpdatingVolume()
+        
+//        GetSensors()
+        let url = URL(string: "http://127.0.0.1:8000/api/accel/")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        let postString = "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": 203.13, \"y\": 23019.432, \"z\": 2391.03}}]"
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+        }
+        task.resume()
         
         
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.stopUpdatingVolume()
+        
+        if manager.isAccelerometerAvailable {
+            manager.stopAccelerometerUpdates()
+        }
+        
+//        self.stopUpdatingVolume()
     }
     
     // MARK: - Internal methods
 
-    @IBAction func GetSensors(_ sender: Any) {
-        // TODO 光センサーの値を取得
+    func GetSensors() {
+        // 光センサーの値を取得
         let brightness = UIScreen.main.brightness
         lightLabel.text = String(format: "brightness: %.6f", brightness)
         
         // 加速度
-        manager.accelerometerUpdateInterval = 1 / 2;
-        
-        let accelerometerHandler: CMAccelerometerHandler = {
-            [weak self] data, error in
-            // 加速度センサのx軸の値を表示
-            self?.accerelometerLabel.text = String(format: "Accel.: %.6f", data!.acceleration.x)
-        }
-        
-        // アップデートスタート
-        manager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler:accelerometerHandler)
-        
-        sleep(1)
-        
         if manager.isAccelerometerAvailable {
-            // アップデートをストップ
-            manager.stopAccelerometerUpdates()
+            manager.accelerometerUpdateInterval = 1; // 1Hz
+            
+            let accelerometerHandler: CMAccelerometerHandler = {
+                [weak self] data, error in
+                
+                self?.xLabel.text = "".appendingFormat("x %.4f", data!.acceleration.x)
+                self?.yLabel.text = "".appendingFormat("y %.4f", data!.acceleration.y)
+                self?.zLabel.text = "".appendingFormat("z %.4f", data!.acceleration.z)
+                
+                print("x: \(data!.acceleration.x) y: \(data!.acceleration.y) z: \(data!.acceleration.z)")
+            }
+            
+            manager.startAccelerometerUpdates(to: OperationQueue.current!,
+                                              withHandler: accelerometerHandler)
         }
-        
-        
         
     }
     

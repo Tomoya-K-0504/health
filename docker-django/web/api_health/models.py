@@ -12,6 +12,13 @@ class Acceleration(models.Model):
     z = models.FloatField(default=0)
 
     @classmethod
-    def create(cls, data_source, accel_dict):
-        acceleration = Acceleration(data_source=data_source, x=accel_dict["x"], y=accel_dict["y"], z=accel_dict["z"])
-        acceleration.save()
+    def create(cls, accel_data):
+        for accel_dict in accel_data:
+            data_source = DataSource.objects.get(name=accel_dict["data_source"])
+            acceleration = Acceleration(
+                data_source=data_source,
+                x=accel_dict["values"]["x"],
+                y=accel_dict["values"]["y"],
+                z=accel_dict["values"]["z"]
+            )
+        # acceleration.save()
