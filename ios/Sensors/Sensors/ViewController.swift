@@ -21,6 +21,30 @@ private func AudioQueueInputCallback(
     // Do nothing, because not recoding.
 }
 
+private func postAccess(_ acceleration: [Double]) {
+    let url = URL(string: "http://35.236.167.20/api/accel/")!
+    var request = URLRequest(url: url)
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.httpMethod = "POST"
+    let postString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": %.6f, \"y\": %.6f, \"z\": %.6f}}]", acceleration[0], acceleration[1], acceleration[2])
+    request.httpBody = postString.data(using: .utf8)
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        guard let data = data, error == nil else {                                                 // check for fundamental networking error
+            print("error=\(error)")
+            return
+        }
+        
+        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+            print("statusCode should be 200, but is \(httpStatus.statusCode)")
+            print("response = \(response)")
+        }
+        
+        let responseString = String(data: data, encoding: .utf8)
+        print("responseString = \(responseString)")
+    }
+    task.resume()
+}
+
 
 class ViewController: UIViewController {
 
@@ -59,28 +83,8 @@ class ViewController: UIViewController {
         
 //        self.startUpdatingVolume()
         
-//        GetSensors()
-        let url = URL(string: "http://127.0.0.1:8000/api/accel/")!
-        var request = URLRequest(url: url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        let postString = "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": 203.13, \"y\": 23019.432, \"z\": 2391.03}}]"
-        request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
-            
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(responseString)")
-        }
-        task.resume()
+        GetSensors()
+        
         
         
     }
@@ -112,6 +116,9 @@ class ViewController: UIViewController {
                 self?.xLabel.text = "".appendingFormat("x %.4f", data!.acceleration.x)
                 self?.yLabel.text = "".appendingFormat("y %.4f", data!.acceleration.y)
                 self?.zLabel.text = "".appendingFormat("z %.4f", data!.acceleration.z)
+                
+                var acceleration: [Double] = [data!.acceleration.x, data!.acceleration.y, data!.acceleration.z]
+                postAccess(acceleration)
                 
                 print("x: \(data!.acceleration.x) y: \(data!.acceleration.y) z: \(data!.acceleration.z)")
             }
