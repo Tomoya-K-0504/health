@@ -83,7 +83,7 @@ class ViewController: UIViewController {
         
         self.startUpdatingVolume()
         
-        GetSensors()
+//        GetSensors()
         
         
         
@@ -198,8 +198,7 @@ class ViewController: UIViewController {
         self.lightLabel.text = String(format: "brightness: %.6f", brightness)
         
         // サーバーに送信
-//        let url = URL(string: "http://35.236.167.20/api/env/")!
-        let url = URL(string: "http://localhost/api/env/")!
+        let url = URL(string: "http://35.236.167.20/api/env/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
