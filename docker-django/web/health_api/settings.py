@@ -25,12 +25,13 @@ SECRET_KEY = 'prfkt-g(44^oasas&+iq0r5v+e-a3)l8(r8ftw8bn9kzv6cp^z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['35.236.167.20', 'localhost']
+ALLOWED_HOSTS = ['35.236.167.20', 'localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'api_health.apps.ApiHealthConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
