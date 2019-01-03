@@ -87,9 +87,9 @@ class ViewController: UIViewController {
         initView()
         lightLabel.text = "brightness: "
         
-//        self.startUpdatingVolume()
+        self.startUpdatingVolume()
         
-//        GetSensors()
+        GetSensors()
         
         
         
@@ -120,26 +120,17 @@ class ViewController: UIViewController {
                 print("error=\(error)")
                 return
             }
-            
+
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
                 print("response = \(response)")
             }
-            
+
             let responseString = String(data: data, encoding: .utf8)
             print("responseString = \(responseString)")
         }
         task.resume()
     }
-
-//    func sendData(sender: AnyObject) {
-////        let selectedRows = tableView.indexPathsForSelectedRows
-//
-//
-////        let selectedData = selectedRows?.map { dataArray[$0.row].ID }
-//
-//
-//    }
 
     func GetSensors() {
         
@@ -199,7 +190,7 @@ class ViewController: UIViewController {
         var enabledLevelMeter: UInt32 = 1
         AudioQueueSetProperty(self.queue, kAudioQueueProperty_EnableLevelMetering, &enabledLevelMeter, UInt32(MemoryLayout<UInt32>.size))
         
-        self.timer = Timer.scheduledTimer(timeInterval: 30,
+        self.timer = Timer.scheduledTimer(timeInterval: 1,
                                           target: self,
                                           selector: #selector(self.detectVolume(_:)),
                                           userInfo: nil,
@@ -285,8 +276,7 @@ extension ViewController:UITableViewDelegate {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
         let cellText = cell?.textLabel?.text
-        let index = data.index(of: cellText!)
-        sendData.remove(at: index!)
+        sendData.remove(at: sendData.count-1)
     }
 }
 

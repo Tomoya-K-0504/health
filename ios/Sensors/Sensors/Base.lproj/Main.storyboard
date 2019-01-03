@@ -87,8 +87,9 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oOg-xr-qg9">
-                                <rect key="frame" x="123" y="584" width="128" height="39"/>
+                                <rect key="frame" x="123" y="571" width="128" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="送信"/>
                                 <connections>
                                     <action selector="ButtonTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="hqX-lk-LOG"/>
