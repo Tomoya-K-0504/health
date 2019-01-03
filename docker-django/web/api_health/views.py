@@ -53,7 +53,7 @@ def save_act(request):
 @csrf_exempt
 def save_label(request):
     if request.method == "POST":
-        label_data = json.loads(request.body.decode("utf-8"))
+        label_data = request.body.decode("utf-8")
         for label_one in label_data.split(","):
             label = Label(name=label_one)
             label.save()
