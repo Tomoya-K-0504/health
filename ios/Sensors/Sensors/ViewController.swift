@@ -59,7 +59,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書"]
+    let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書", "移動"]
     var sendData: [String] = []
     
     // 音声入力用
@@ -113,6 +113,7 @@ class ViewController: UIViewController {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         let postString = sendData.joined(separator: ",")
+        print(postString)
         request.httpBody = postString.data(using: .utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
