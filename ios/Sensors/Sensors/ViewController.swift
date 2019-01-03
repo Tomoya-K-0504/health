@@ -140,7 +140,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 self?.zLabel.text = "".appendingFormat("z %.4f", data!.acceleration.z)
                 
                 var acceleration: [Double] = [data!.acceleration.x, data!.acceleration.y, data!.acceleration.z]
-                let urlString =
                 let accelString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": %.6f, \"y\": %.6f, \"z\": %.6f}}]", acceleration[0], acceleration[1], acceleration[2])
                 postAccess("http://35.236.167.20/api/accel/", postString: accelString)
                 
