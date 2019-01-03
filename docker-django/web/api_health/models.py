@@ -38,5 +38,8 @@ class ActSensor(models.Model):
     altitude = models.FloatField(default=0.0)
 
 
+class Label(models.Model):
+    name = models.CharField(max_length=100)
+
+
 # class FitbitSleep(models.Model):
-    

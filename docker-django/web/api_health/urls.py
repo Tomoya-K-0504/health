@@ -10,6 +10,7 @@ urlpatterns = [
     path('accel/', views.save_accel, name='save_accel'),
     path('env/', views.save_env, name='save_env'),
     path('act/', views.save_act, name='save_act'),
+    path('label/', views.save_label, name='save_label'),
     # # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),
     # # ex: /polls/5/vote/

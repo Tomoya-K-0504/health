@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Acceleration, DataSource, EnvSensor, ActSensor
+from .models import Acceleration, DataSource, EnvSensor, ActSensor, Label
 
 
 def index(request):
@@ -39,12 +39,22 @@ def save_env(request):
 def save_act(request):
     if request.method == "POST":
         act_data = json.loads(request.body.decode("utf-8"))
-        for act in env_data:
+        for act in act_data:
             act_sensor = ActSensor(
                 data_source=DataSource.objects.get(name=act["data_source"]),
                 brightness=act["values"]["brightness"],
                 m_peak_power=act["values"]["m_peak_power"],
                 m_average_power=act["values"]["m_average_power"]
             )
-            env_sensor.save()
+            act_sensor.save()
+    return HttpResponseRedirect(reverse('api:index'))
+
+
+@csrf_exempt
+def save_label(request):
+    if request.method == "POST":
+        label_data = json.loads(request.body.decode("utf-8"))
+        for label_one in label_data.split(","):
+            label = Label(name=label_one)
+            label.save()
     return HttpResponseRedirect(reverse('api:index'))
