@@ -48,7 +48,6 @@ private func postAccess(_ acceleration: [Double]) {
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var displaySensorValues: UIButton!
     @IBOutlet weak var labelText: UITextField!
     @IBOutlet weak var lightLabel: UILabel!
     @IBOutlet weak var xLabel: UILabel!
@@ -56,6 +55,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var zLabel: UILabel!
     @IBOutlet weak var peakTextField: UITextField!
     @IBOutlet weak var averageTextField: UITextField!
+    
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
+    
+    let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書"]
+    var sendData: [String] = []
     
     // 音声入力用
     var queue: AudioQueueRef!
@@ -79,9 +84,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        initView()
         lightLabel.text = "brightness: "
         
-        self.startUpdatingVolume()
+//        self.startUpdatingVolume()
         
 //        GetSensors()
         
@@ -100,6 +106,39 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Internal methods
+    
+    @IBAction func ButtonTouchDown(_ sender: Any) {
+        let url = URL(string: "http://35.236.167.20/api/label/")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        let postString = sendData.joined(separator: ",")
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+        }
+        task.resume()
+    }
+
+//    func sendData(sender: AnyObject) {
+////        let selectedRows = tableView.indexPathsForSelectedRows
+//
+//
+////        let selectedData = selectedRows?.map { dataArray[$0.row].ID }
+//
+//
+//    }
 
     func GetSensors() {
         
@@ -223,10 +262,42 @@ class ViewController: UIViewController {
         // Show "LOUD!!" if mPeakPower is larger than -1.0
 //        self.loudLabel.isHidden = (levelMeter.mPeakPower >= -1.0) ? false : true
     }
-    
-    
-    
-    
-    
 }
 
+extension ViewController {
+    private func initView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        // 複数選択可にする
+        tableView.allowsMultipleSelection = true
+    }
+}
+
+extension ViewController:UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = .checkmark
+        sendData.append((cell?.textLabel?.text)!)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at:indexPath)
+        cell?.accessoryType = .none
+        let cellText = cell?.textLabel?.text
+        let index = data.index(of: cellText!)
+        sendData.remove(at: index!)
+    }
+}
+
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+        cell?.textLabel?.text = data[indexPath.row]
+        cell?.selectionStyle = .none
+        return cell!
+    }
+}
