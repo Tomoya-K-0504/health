@@ -39,14 +39,13 @@ def save_env(request):
 def save_act(request):
     if request.method == "POST":
         act_data = json.loads(request.body.decode("utf-8"))
-        for act in act_data:
-            act_sensor = ActSensor(
-                data_source=DataSource.objects.get(name=act["data_source"]),
-                brightness=act["values"]["brightness"],
-                m_peak_power=act["values"]["m_peak_power"],
-                m_average_power=act["values"]["m_average_power"]
-            )
-            act_sensor.save()
+        act_sensor = ActSensor(
+            data_source=DataSource.objects.get(name=act_data["data_source"]),
+            latitude=act_data["values"]["latitude"],
+            longitude=act_data["values"]["longitude"],
+            altitude=act_data["values"]["altitude"]
+        )
+        act_sensor.save()
     return HttpResponseRedirect(reverse('api:index'))
 
 
@@ -58,3 +57,4 @@ def save_label(request):
             label = Label(name=label_one)
             label.save()
     return HttpResponseRedirect(reverse('api:index'))
+
