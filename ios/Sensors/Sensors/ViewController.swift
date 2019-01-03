@@ -8,6 +8,7 @@
 import AudioToolbox
 import UIKit
 import CoreMotion //CoreMotionをインポート
+import CoreLocation
 
 
 private func AudioQueueInputCallback(
@@ -21,32 +22,33 @@ private func AudioQueueInputCallback(
     // Do nothing, because not recoding.
 }
 
-private func postAccess(_ acceleration: [Double]) {
-    let url = URL(string: "http://35.236.167.20/api/accel/")!
+private func postAccess(_ urlString: String, postString: String) {
+//    print(urlString)
+//    print(postString)
+    let url = URL(string: urlString)!
     var request = URLRequest(url: url)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpMethod = "POST"
-    let postString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": %.6f, \"y\": %.6f, \"z\": %.6f}}]", acceleration[0], acceleration[1], acceleration[2])
     request.httpBody = postString.data(using: .utf8)
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        guard let data = data, error == nil else {                                                 // check for fundamental networking error
-            print("error=\(error)")
-            return
-        }
-        
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-            print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            print("response = \(response)")
-        }
-        
-        let responseString = String(data: data, encoding: .utf8)
-        print("responseString = \(responseString)")
-    }
-    task.resume()
+//    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//        guard let data = data, error == nil else {                                                 // check for fundamental networking error
+//            print("error=\(error)")
+//            return
+//        }
+//
+//        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+//            print("statusCode should be 200, but is \(httpStatus.statusCode)")
+//            print("response = \(response)")
+//        }
+//
+//        let responseString = String(data: data, encoding: .utf8)
+//        print("responseString = \(responseString)")
+//    }
+//    task.resume()
 }
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var labelText: UITextField!
     @IBOutlet weak var lightLabel: UILabel!
@@ -59,8 +61,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書", "移動"]
-    var sendData: [String] = []
+    let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書/文献調査", "移動"]
+    var labelList: [String] = []
+    var actDict: [String:Float] = ["latitude": 0.0, "longitude": 0.0, "altitude": 0.0]
     
     // 音声入力用
     var queue: AudioQueueRef!
@@ -79,20 +82,16 @@ class ViewController: UIViewController {
         mReserved: 0)
     
     let manager = CMMotionManager() //CoreMotionManagerのインスタンス生成
+    var locationManager: CLLocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         initView()
-        lightLabel.text = "brightness: "
         
         self.startUpdatingVolume()
-        
         GetSensors()
-        
-        
-        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -102,34 +101,29 @@ class ViewController: UIViewController {
             manager.stopAccelerometerUpdates()
         }
         
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.stopUpdatingLocation()
+        }
+        
         self.stopUpdatingVolume()
     }
     
     // MARK: - Internal methods
     
     @IBAction func ButtonTouchDown(_ sender: Any) {
-        let url = URL(string: "http://35.236.167.20/api/label/")!
-        var request = URLRequest(url: url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        let postString = sendData.joined(separator: ",")
-        print(postString)
-        request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
-
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(responseString)")
+        let labelString = labelList.joined(separator: ",")
+        postAccess("http://35.236.167.20/api/label/", postString: labelString)
+        
+        do {
+            // Dict -> JSON
+            var jsonString: String = ""
+            let jsonData = try JSONSerialization.data(withJSONObject: actDict)
+            jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)! as String
+            let actString = "{\"data_source\":\"iphone 8\",\"values\":" + jsonString + "}"
+            postAccess("http://35.236.167.20/api/act/", postString: actString)
+        } catch {
+            print("Error!: \(error)")
         }
-        task.resume()
     }
 
     func GetSensors() {
@@ -146,15 +140,48 @@ class ViewController: UIViewController {
                 self?.zLabel.text = "".appendingFormat("z %.4f", data!.acceleration.z)
                 
                 var acceleration: [Double] = [data!.acceleration.x, data!.acceleration.y, data!.acceleration.z]
-                postAccess(acceleration)
+                let urlString =
+                let accelString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"x\": %.6f, \"y\": %.6f, \"z\": %.6f}}]", acceleration[0], acceleration[1], acceleration[2])
+                postAccess("http://35.236.167.20/api/accel/", postString: accelString)
                 
-                print("x: \(data!.acceleration.x) y: \(data!.acceleration.y) z: \(data!.acceleration.z)")
+                
             }
             
             manager.startAccelerometerUpdates(to: OperationQueue.current!,
                                               withHandler: accelerometerHandler)
         }
         
+        // 高度, 緯度経度
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager = CLLocationManager()
+            locationManager.delegate = self
+            locationManager.startUpdatingLocation()
+        }
+        
+    }
+    
+    // Auth
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
+            break
+        case .authorizedAlways, .authorizedWhenInUse:
+            break
+        }
+    }
+    
+    // 高度, 緯度経度
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let newLocation = locations.last,
+            CLLocationCoordinate2DIsValid(newLocation.coordinate) else {
+                print("Error")
+                return
+        }
+        actDict["altitude"] = Float(newLocation.altitude)
+        actDict["latitude"] = Float(newLocation.coordinate.latitude)
+        actDict["longitude"] = Float(newLocation.coordinate.longitude)
     }
     
     func startUpdatingVolume() {
@@ -229,28 +256,9 @@ class ViewController: UIViewController {
         self.lightLabel.text = String(format: "brightness: %.6f", brightness)
         
         // サーバーに送信
-        let url = URL(string: "http://35.236.167.20/api/env/")!
-        var request = URLRequest(url: url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
+        let urlString = "http://35.236.167.20/api/env/"
         let postString = String(format: "[{\"data_source\": \"iphone 8\", \"values\": {\"brightness\": %.6f, \"m_peak_power\": %.6f, \"m_average_power\": %.6f}}]", brightness, levelMeter.mPeakPower, levelMeter.mAveragePower)
-        request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
-            
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(responseString)")
-        }
-        task.resume()
-        
+        postAccess(urlString, postString: postString)
         // Show "LOUD!!" if mPeakPower is larger than -1.0
 //        self.loudLabel.isHidden = (levelMeter.mPeakPower >= -1.0) ? false : true
     }
@@ -269,14 +277,15 @@ extension ViewController:UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark
-        sendData.append((cell?.textLabel?.text)!)
+        labelList.append((cell?.textLabel?.text)!)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
         let cellText = cell?.textLabel?.text
-        sendData.remove(at: sendData.count-1)
+        let index = labelList.index(of: cellText!)
+        labelList.remove(at: index!)
     }
 }
 
