@@ -22,28 +22,18 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location Demo</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Audio Demo</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Motion Activity Demo</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>35.236.167.20</key>
+			<key>127.0.0.1:8000</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-			<key>127.0.0.1:8000</key>
+			<key>35.236.167.20</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>
@@ -59,6 +49,20 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location Demo</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Audio Demo</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion Activity Demo</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

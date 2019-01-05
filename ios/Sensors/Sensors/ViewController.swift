@@ -9,6 +9,8 @@ import AudioToolbox
 import UIKit
 import CoreMotion //CoreMotionをインポート
 import CoreLocation
+import UserNotifications
+import AVFoundation
 
 
 private func AudioQueueInputCallback(
@@ -23,32 +25,32 @@ private func AudioQueueInputCallback(
 }
 
 private func postAccess(_ urlString: String, postString: String) {
-//    print(urlString)
-//    print(postString)
+    print(urlString)
+    print(postString)
     let url = URL(string: urlString)!
     var request = URLRequest(url: url)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpMethod = "POST"
     request.httpBody = postString.data(using: .utf8)
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        guard let data = data, error == nil else {                                                 // check for fundamental networking error
-            print("error=\(error)")
-            return
-        }
-
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-            print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            print("response = \(response)")
-        }
-
-        let responseString = String(data: data, encoding: .utf8)
-        print("responseString = \(responseString)")
-    }
-    task.resume()
+//    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//        guard let data = data, error == nil else {                                                 // check for fundamental networking error
+//            print("error=\(error)")
+//            return
+//        }
+//
+//        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+//            print("statusCode should be 200, but is \(httpStatus.statusCode)")
+//            print("response = \(response)")
+//        }
+//
+//        let responseString = String(data: data, encoding: .utf8)
+//        print("responseString = \(responseString)")
+//    }
+//    task.resume()
 }
 
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, AVAudioPlayerDelegate {
 
     @IBOutlet weak var labelText: UITextField!
     @IBOutlet weak var lightLabel: UILabel!
@@ -84,17 +86,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     let manager = CMMotionManager() //CoreMotionManagerのインスタンス生成
     var locationManager: CLLocationManager!
+    var audioPlayer:AVAudioPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        notifySetting()
         
         initView()
         
-        self.startUpdatingVolume()
         GetSensors()
-        
         self.popOver.layer.cornerRadius = 10
+        
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -112,6 +116,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // MARK: - Internal methods
+    
+    func notifySetting() {
+        
+        // 通知許可ダイアログを表示
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            // エラー処理を書く
+        }
+        
+        let content = UNMutableNotificationContent()
+        content.title = "アノテーションしよ！"
+//        content.subtitle = "Subtitle" // 新登場！
+        content.body = "アノテーションしよ！"
+        content.sound = UNNotificationSound.default
+        
+        // 10秒ごと
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3600, repeats: true)
+        let request = UNNotificationRequest(identifier: "1hourInterval",
+                                            content: content,
+                                            trigger: trigger)
+        
+        // ローカル通知予約
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
+//        center.removeAllPendingNotificationRequests() //送信待ちの全通知を全削除
+    }
     
     @IBAction func ButtonTouchDown(_ sender: Any) {
         
@@ -166,6 +197,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.delegate = self
             locationManager.startUpdatingLocation()
         }
+        
+        // これが終わらない
+        self.startUpdatingVolume()
         
     }
     
