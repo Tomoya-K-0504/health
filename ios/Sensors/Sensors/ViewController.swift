@@ -59,6 +59,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var averageTextField: UITextField!
     
     @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet var popOver: UIView!
     @IBOutlet weak var tableView: UITableView!
     
     let data = ["睡眠","運動","食事","休憩","作業","家事","風呂","読書/文献調査", "移動"]
@@ -92,6 +93,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         self.startUpdatingVolume()
         GetSensors()
+        
+        self.popOver.layer.cornerRadius = 10
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -111,6 +114,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // MARK: - Internal methods
     
     @IBAction func ButtonTouchDown(_ sender: Any) {
+        
+        self.view.addSubview(popOver)
+        popOver.center = self.view.center
+        
         let labelString = labelList.joined(separator: ",")
         postAccess("http://35.236.167.20/api/label/", postString: labelString)
         
@@ -126,6 +133,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
 
+    @IBAction func doneButton(_ sender: Any) {
+        self.popOver.removeFromSuperview()
+    }
     func GetSensors() {
         
         // 加速度
