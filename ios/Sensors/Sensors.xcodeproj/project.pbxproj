@@ -15,6 +15,7 @@
 		66209ABB21D9DE880085694C /* SensorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66209ABA21D9DE880085694C /* SensorsTests.swift */; };
 		66209AC621D9DE880085694C /* SensorsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66209AC521D9DE880085694C /* SensorsUITests.swift */; };
 		66209AD521D9E1C80085694C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66209AD421D9E1C80085694C /* CoreMotion.framework */; };
+		66209AD721DDDEE00085694C /* SendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66209AD621DDDEE00085694C /* SendViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		66209AC521D9DE880085694C /* SensorsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorsUITests.swift; sourceTree = "<group>"; };
 		66209AC721D9DE880085694C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66209AD421D9E1C80085694C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		66209AD621DDDEE00085694C /* SendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				66209AA521D9DE870085694C /* AppDelegate.swift */,
 				66209AA721D9DE870085694C /* ViewController.swift */,
 				66209AA921D9DE870085694C /* Main.storyboard */,
+				66209AD621DDDEE00085694C /* SendViewController.swift */,
 				66209AAC21D9DE880085694C /* Assets.xcassets */,
 				66209AAE21D9DE880085694C /* LaunchScreen.storyboard */,
 				66209AB121D9DE880085694C /* Info.plist */,
@@ -205,6 +208,11 @@
 				TargetAttributes = {
 					66209AA121D9DE870085694C = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					66209AB521D9DE880085694C = {
 						CreatedOnToolsVersion = 10.1;
@@ -270,6 +278,7 @@
 			files = (
 				66209AA821D9DE870085694C /* ViewController.swift in Sources */,
 				66209AA621D9DE870085694C /* AppDelegate.swift in Sources */,
+				66209AD721DDDEE00085694C /* SendViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

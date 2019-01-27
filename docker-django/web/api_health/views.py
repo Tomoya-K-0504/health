@@ -20,6 +20,7 @@ def save_accel(request):
     return HttpResponseRedirect(reverse('api:index'))
 
 
+# TODO 端末IDで認証
 @csrf_exempt
 def save_env(request):
     if request.method == "POST":

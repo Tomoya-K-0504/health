@@ -4,7 +4,7 @@
 docker-compose up -d
 
 #### 初期データを投入する
-python manage.py loaddata api_health/fixtures/DataSources.json
+docker-compose exec web python manage.py loaddata api_health/fixtures/DataSources.json
 
 
 ### 試しにデータを入れてみる
@@ -17,7 +17,7 @@ docker-compose exec web python manage.py shell
 ```
 shell内で
 ```
->>> from api_health.models import Acceleration
+>>> from api_health.models import Acceleration, DataSource, EnvSensor, ActSensor, Label
 >>> Acceleration.objects.all()
 ```
 返り値が`<QuerySet [<Acceleration: Acceleration object (1)>]>`のようになればOK.
@@ -31,4 +31,18 @@ python manage.py makemigrations api_health
 マイグレーション
 ```
 python manage.py migrate
+```
+
+サーバーのコードの更新時に行う手順
+```
+sudo -i
+cd /home/makeffort134/health
+git pull origin api
+# conflictの解消
+cd docker-django/web
+docker-compose exec web python manage.py migrate
+docker-compose down
+docker-compose up -d
+# shellで確認
+docker-compose exec web python manage.py shell
 ```
